@@ -13,7 +13,7 @@ export default {
         responseType: 'blob'
       }
     )
-    .then((response) => {
+    .then((response: any) => {
       return new Promise<Product[]>((resolve, reject) => {
         Papa.parse(response.data, {
           header: true,
