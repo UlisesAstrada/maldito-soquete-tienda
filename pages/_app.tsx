@@ -15,7 +15,7 @@ const App:React.FC<AppProps> = ({ Component, pageProps }) => {
       padding={4}
       >
         <VStack marginBottom={6}>
-          <Image borderRadius={9999} alt="an image" src="//placehold.it/128x128"></Image>
+          <Image borderRadius={9999} alt="an image" src="https://i.ibb.co/J5n4WsY/maldito-soquete-logo.jpg" width="128px" height="128px"></Image>
           <Heading>Maldito Soquete</Heading>
           <Text>Tu tienda de zoquetes 🤘</Text>
         </VStack>

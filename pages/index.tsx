@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Grid, Link, Stack, Text } from '@chakra-ui/react';
+import { Button, Flex, Grid, Link, Stack, Text } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
 import React from 'react';
 import api from '../product/api';
