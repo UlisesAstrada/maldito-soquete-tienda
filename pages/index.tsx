@@ -1,4 +1,11 @@
-import { Button, Flex, Grid, Link, Stack, Text } from '@chakra-ui/react';
+import { Button, Flex, Grid, Link, Image, Stack, Text, Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Input} from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
 import React from 'react';
 import api from '../product/api';
@@ -27,12 +34,14 @@ const IndexRoute: React.FC<Props> = ({products}) => {
     ${parseCurrency(cart.reduce((total, product) => total + product.price, 0))}`)
   }, [cart])
 
+
   return (
     <Stack spacing={6}>
       <Grid gridGap="6" templateColumns="repeat(auto-fill, minmax(240px, 1fr))">
     {products.map(product => (
         <Stack spacing={3} borderRadius="md" padding={4} backgroundColor="gray.100" key={product.id}>
           <Stack spacing={1}>
+          <Image alt="" src={product.image} maxHeight={250} objectFit="contain" borderTopRadius="md"/>
           <Text>{product.title}</Text>
           <Text fontSize="sm" fontWeight="500" color="green.500">{parseCurrency(product.price)}</Text>
           </Stack>
@@ -70,7 +79,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       products,
     },
-    revalidate: 120
+    revalidate: 10
   }
 }
 
