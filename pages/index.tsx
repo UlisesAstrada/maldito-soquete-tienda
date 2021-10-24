@@ -94,7 +94,7 @@ const IndexRoute: React.FC<Props> = ({products}) => {
           width={{base: "289px", md: "container.md"}}
           fontSize={{base: "sm", md: "md"}}
           as={Link} 
-          href={`https://wa.me/5493512316539?text=${encodeURIComponent(text)}`} 
+          href={`https://wa.me/541?text=${encodeURIComponent(text)}`} 
           isExternal
           colorScheme="whatsapp">
             Completar pedido ({cart.length} productos)- 
