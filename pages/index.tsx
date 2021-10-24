@@ -7,11 +7,14 @@ import { Button, Flex, Grid, Link, Image, Stack, Text, Drawer, useToast, useDisc
   DrawerCloseButton,
   Input,
   VStack,
-  Divider} from '@chakra-ui/react';
+  Divider,
+  HStack,
+  StackDivider} from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
 import React from 'react';
 import api from '../product/api';
 import { Product } from '../product/types';
+import Swal from 'sweetalert2'
 
 interface Props{
   products: Product[];
@@ -29,7 +32,8 @@ const IndexRoute: React.FC<Props> = ({products}) => {
   
   const [cart, setCart] = React.useState<Product[]>([])
 
-  
+
+
   const text = React.useMemo(() => {
     return cart
     .reduce((message, product) => message.concat(`* ${product.title} - ${parseCurrency(product.price)}\n`), ``)
@@ -96,9 +100,32 @@ const IndexRoute: React.FC<Props> = ({products}) => {
             Completar pedido ({cart.length} productos)- 
             Total = ${cart.reduce((total, product) => total + product.price, 0)}
           </Button>
+          <HStack>
           <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
         Ver Carrito
       </Button>
+      <Button colorScheme="red" onClick={() => Swal.fire({
+  title: '¿Querés vaciar el carrito?',
+  text: "¡Vas a perder todos los productos que agregaste!",
+  icon: 'warning',
+  showCancelButton: true,
+  cancelButtonText: '¡No, cancelar!',
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '¡Sí, vaciar!'
+}).then((result) => {
+  if (result.isConfirmed) {
+    setCart([])
+    Swal.fire(
+      '¡Carrito vaciado!',
+      'Los productos fueron quitados',
+      'success'
+    )
+  }
+})}>
+        Vaciar Carrito
+      </Button>
+          </HStack>
       <Drawer
         isOpen={isOpen}
         placement="right"
@@ -108,10 +135,15 @@ const IndexRoute: React.FC<Props> = ({products}) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Tu carrito</DrawerHeader>
+          <DrawerHeader>Tu carrito 😎</DrawerHeader>
 
           <DrawerBody>
-            {cart.map((product) => (<><Stack><Text><b>{product.title}</b></Text><Image alt={product.title} key={product.id} src={product.image} maxWidth={200} maxHeight={280}/></Stack></>))}
+            {cart.map((product) => (<><Stack><Text><b>{product.title}</b></Text><Image alt={product.title} key={product.id} src={product.image} 
+            maxWidth={200} maxHeight={280}/></Stack></>))}
+
+            <Text><b>{cart.length} productos añadidos -
+            Total = ${cart.reduce((total, product) => total + product.price, 0)}</b></Text>
+    
           </DrawerBody>
 
           <DrawerFooter>
@@ -125,7 +157,7 @@ const IndexRoute: React.FC<Props> = ({products}) => {
             colorScheme="whatsapp"
             as={Link} 
             href={`https://wa.me/5493512316539?text=${encodeURIComponent(text)}`} 
-            isExternal>Comprar</Button>
+            isExternal>Completar pedido</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
