@@ -73,7 +73,7 @@ const IndexRoute: React.FC<Props> = ({products}) => {
               title: "Producto añadido!",
               description: `Agregaste ${product.title} al carrito`,
               status: "success",
-              duration: 1500,
+              duration: 1200,
               isClosable: true,
             })
           }}
@@ -148,9 +148,9 @@ const IndexRoute: React.FC<Props> = ({products}) => {
 
           <DrawerFooter>
             <Button 
-            as={Link} 
-            href={`https://wa.me/5493512316539?text=${encodeURIComponent(text)}`} 
-            isExternalvariant="outline" mr={3} onClick={onClose}>
+            variant="outline" 
+            mr={3} 
+            onClick={onClose}>
               Cerrar
             </Button>
             <Button 
