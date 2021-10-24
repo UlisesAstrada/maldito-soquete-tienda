@@ -1,11 +1,13 @@
-import { Button, Flex, Grid, Link, Image, Stack, Text, Drawer, useToast,
+import { Button, Flex, Grid, Link, Image, Stack, Text, Drawer, useToast, useDisclosure,
   DrawerBody,
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  Input} from '@chakra-ui/react';
+  Input,
+  VStack,
+  Divider} from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
 import React from 'react';
 import api from '../product/api';
@@ -38,6 +40,14 @@ const IndexRoute: React.FC<Props> = ({products}) => {
   
   const toast = useToast()
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  
+  const btnRef = React.useRef()
+
+  
+  const [placement, setPlacement] = React.useState("right")
+
   return (
     <Stack spacing={6}>
       <Grid gridGap="6" templateColumns="repeat(auto-fill, minmax(240px, 1fr))">
@@ -59,7 +69,7 @@ const IndexRoute: React.FC<Props> = ({products}) => {
               title: "Producto añadido!",
               description: `Agregaste ${product.title} al carrito`,
               status: "success",
-              duration: 3000,
+              duration: 1500,
               isClosable: true,
             })
           }}
@@ -72,17 +82,54 @@ const IndexRoute: React.FC<Props> = ({products}) => {
       {Boolean(cart.length) && (
         <Flex
         alignItems="center"
-        justifyContent="center"
+        justifyContent="space-around"
         bottom={4}
         >
+          <VStack maxWidth={150}>
           <Button
-          width="fit-content"
+          width={{base: "289px", md: "container.md"}}
+          fontSize={{base: "sm", md: "md"}}
           as={Link} 
           href={`https://wa.me/5493512316539?text=${encodeURIComponent(text)}`} 
           isExternal
           colorScheme="whatsapp">
-            Completar pedido ({cart.length} productos) - Total = ${cart.reduce((total, product) => total + product.price, 0)}
+            Completar pedido ({cart.length} productos)- 
+            Total = ${cart.reduce((total, product) => total + product.price, 0)}
           </Button>
+          <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+        Ver Carrito
+      </Button>
+      <Drawer
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Tu carrito</DrawerHeader>
+
+          <DrawerBody>
+            {cart.map((product) => (<><Stack><Text><b>{product.title}</b></Text><Image alt={product.title} key={product.id} src={product.image} maxWidth={200} maxHeight={280}/></Stack></>))}
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button 
+            as={Link} 
+            href={`https://wa.me/5493512316539?text=${encodeURIComponent(text)}`} 
+            isExternalvariant="outline" mr={3} onClick={onClose}>
+              Cerrar
+            </Button>
+            <Button 
+            colorScheme="whatsapp"
+            as={Link} 
+            href={`https://wa.me/5493512316539?text=${encodeURIComponent(text)}`} 
+            isExternal>Comprar</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+          </VStack>
         </Flex>
       )}
     </Stack>
