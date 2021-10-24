@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, Link, Image, Stack, Text, Drawer,
+import { Button, Flex, Grid, Link, Image, Stack, Text, Drawer, useToast,
   DrawerBody,
   DrawerFooter,
   DrawerHeader,
@@ -27,6 +27,7 @@ const IndexRoute: React.FC<Props> = ({products}) => {
   
   const [cart, setCart] = React.useState<Product[]>([])
 
+  
   const text = React.useMemo(() => {
     return cart
     .reduce((message, product) => message.concat(`* ${product.title} - ${parseCurrency(product.price)}\n`), ``)
@@ -34,6 +35,8 @@ const IndexRoute: React.FC<Props> = ({products}) => {
     ${parseCurrency(cart.reduce((total, product) => total + product.price, 0))}`)
   }, [cart])
 
+  
+  const toast = useToast()
 
   return (
     <Stack spacing={6}>
@@ -45,7 +48,22 @@ const IndexRoute: React.FC<Props> = ({products}) => {
           <Text>{product.title}</Text>
           <Text fontSize="sm" fontWeight="500" color="green.500">{parseCurrency(product.price)}</Text>
           </Stack>
-          <Button size="sm" colorScheme="primary" variant="outline" onClick={() => setCart(cart => cart.concat(product))}>
+
+          <Button 
+          size="sm" 
+          colorScheme="primary" 
+          variant="outline" 
+          onClick={() => {
+            setCart(cart => cart.concat(product))
+            toast({
+              title: "Producto añadido!",
+              description: `Agregaste ${product.title} al carrito`,
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+            })
+          }}
+          >
             Agregar
           </Button>
         </Stack>
@@ -63,7 +81,7 @@ const IndexRoute: React.FC<Props> = ({products}) => {
           href={`https://wa.me/5493512316539?text=${encodeURIComponent(text)}`} 
           isExternal
           colorScheme="whatsapp">
-            Completar pedido ({cart.length} productos)
+            Completar pedido ({cart.length} productos) - Total = ${cart.reduce((total, product) => total + product.price, 0)}
           </Button>
         </Flex>
       )}
